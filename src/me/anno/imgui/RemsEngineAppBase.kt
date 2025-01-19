@@ -93,6 +93,8 @@ abstract class RemsEngineAppBase : Application() {
 
     private val isInFocus get() = !ImGui.isWindowFocused(ImGuiFocusedFlags.AnyWindow)
 
+    private val xs = IntArray(1)
+    private val ys = IntArray(1)
     private fun renderRemsEngine() {
 
         // update time
@@ -100,8 +102,7 @@ abstract class RemsEngineAppBase : Application() {
 
         // update window size
         val window = GFX.someWindow
-        val xs = IntArray(1)
-        val ys = IntArray(1)
+
         glfwGetWindowSize(handle, xs, ys)
         window.width = xs[0]
         window.height = ys[0]
@@ -111,9 +112,6 @@ abstract class RemsEngineAppBase : Application() {
 
         GFX.activeWindow = window
         window.needsRefresh = true
-        for (it in window.windowStack) {
-            it.drawDirectly = false
-        }
         RenderStep.renderStep(window, true)
 
         if (!isInFocus) {
