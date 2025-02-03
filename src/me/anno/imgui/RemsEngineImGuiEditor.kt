@@ -110,18 +110,17 @@ class RemsEngineImGuiEditor : RemsEngineAppBase() {
     }
 
     private fun showTreeView(node: PrefabSaveable) {
-        // todo re-create our tree view using imGui
 
         val hasChildren = hasChildren(node)
         val flags = ImGuiTreeNodeFlags.OpenOnArrow or
                 (!hasChildren).toInt(ImGuiTreeNodeFlags.Leaf or ImGuiTreeNodeFlags.NoTreePushOnOpen)
 
-        val isOpen = ImGui.treeNodeEx("${node.name} (${node.className})", flags) && hasChildren
+        val isOpen = ImGui.treeNodeEx("${node.name} (${node.className})", flags)
         if (ImGui.isItemClicked()) {
             EditorState.select(node, ImGui.getIO().keyShift)
         }
 
-        if (isOpen) {
+        if (isOpen && hasChildren) {
             for (type in node.listChildTypes()) {
                 for (child in node.getChildListByType(type)) {
                     showTreeView(child)

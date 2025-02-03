@@ -4,6 +4,7 @@ import imgui.ImFontConfig
 import imgui.ImGui
 import imgui.app.Application
 import imgui.flag.ImGuiFocusedFlags
+import me.anno.Engine
 import me.anno.Time
 import me.anno.engine.EngineBase
 import me.anno.engine.OfficialExtensions
@@ -55,6 +56,11 @@ abstract class RemsEngineAppBase : Application() {
         instance.gameInit()
 
         overrideGLFWListeners(window)
+    }
+
+    override fun postRun() {
+        super.postRun()
+        Engine.requestShutdown()
     }
 
     private fun overrideGLFWListeners(window: OSWindow) {
