@@ -1,5 +1,6 @@
 package me.anno.imgui
 
+import imgui.ImFontConfig
 import imgui.ImGui
 import imgui.app.Application
 import imgui.flag.ImGuiFocusedFlags
@@ -18,6 +19,7 @@ import me.anno.input.GLFWListeners.handleDropCallback
 import me.anno.input.GLFWListeners.handleKeyCallback
 import me.anno.input.GLFWListeners.handleMouseButton
 import me.anno.input.GLFWListeners.handleScroll
+import me.anno.io.files.FileReference
 import me.anno.utils.Clock
 import me.anno.utils.Color.black
 import me.anno.utils.Color.withAlpha
@@ -123,6 +125,21 @@ abstract class RemsEngineAppBase : Application() {
         // draw shadow over scene
         val color = black.withAlpha(0.5f)
         DrawRectangles.drawRect(0, 0, window.width, window.height, color)
+    }
+
+    fun loadFont(fontPath: FileReference, fontSize: Float) {
+        fontPath.readBytes { bytes, err ->
+            if (bytes == null) {
+                err?.printStackTrace()
+                return@readBytes
+            }
+            val io = ImGui.getIO()
+            val fontAtlas = io.fonts
+            val fontConfig = ImFontConfig()
+            fontAtlas.addFontFromMemoryTTF(bytes, fontSize, fontConfig)
+            fontConfig.destroy()
+            ImGui.getIO().fonts.build()
+        }
     }
 
     override fun process() {
